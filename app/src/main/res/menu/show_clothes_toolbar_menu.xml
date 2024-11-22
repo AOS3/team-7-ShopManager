@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemShowClothesModify"
+        android:icon="@drawable/edit_24px"
+        android:title="수정"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ItemShowClothesDelete"
+        android:icon="@drawable/delete_24px"
+        android:title="삭제"
+        app:showAsAction="always" />
+</menu>
