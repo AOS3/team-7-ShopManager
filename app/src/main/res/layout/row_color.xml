@@ -1,0 +1,30 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="4dp"
+    android:padding="8dp">
+
+    <!-- 색상 표시 영역 -->
+    <TextView
+        android:id="@+id/colorView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="#808080"
+        android:gravity="center"
+        android:text="" />
+
+    <!-- 선택 여부를 표시하는 공간 -->
+    <TextView
+        android:id="@+id/selectionIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="X"
+        android:textSize="14sp"
+        android:textColor="#808080"
+        android:background="@drawable/border_inactive"
+        android:padding="4dp" />
+</LinearLayout>

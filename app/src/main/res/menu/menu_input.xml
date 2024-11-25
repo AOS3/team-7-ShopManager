@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="아우터"
+        app:showAsAction="never"
+        android:id="@+id/input_outer_menu"/>
+    <item
+        android:title="셔츠"
+        app:showAsAction="never"
+        android:id="@+id/input_shirt_menu"/>
+    <item
+        android:title="바지"
+        app:showAsAction="never"
+        android:id="@+id/input_pants_menu"/>
+    <item
+        android:title="치마"
+        app:showAsAction="never"
+        android:id="@+id/input_skirt_menu"/>
+    <item
+        android:id="@+id/itemSave"
+        android:title="저장"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_edit"/>
+</menu>

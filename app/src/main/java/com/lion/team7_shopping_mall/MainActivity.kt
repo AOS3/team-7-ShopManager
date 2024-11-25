@@ -28,12 +28,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        replaceFragment(
-            FragmentName.SHOW_CLOTHES_FRAGMENT,
-            false,
-            true,
-            null,
-        )
+//        replaceFragment(
+//            FragmentName.SHOW_CLOTHES_FRAGMENT,
+//            false,
+//            true,
+//            null,
+//        )
     }
 
     // 프래그먼트를 교체하는 함수
