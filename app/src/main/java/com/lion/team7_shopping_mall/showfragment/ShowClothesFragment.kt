@@ -1,4 +1,4 @@
-package com.lion.team7_shopping_mall.fragment
+package com.lion.team7_shopping_mall.showfragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

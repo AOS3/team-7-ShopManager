@@ -26,7 +26,7 @@
         </activity>
         <!-- 촬영된 사진을 가져올 수 있는 프로바이더 -->
         <provider
-            android:authorities="com.lion.getpicture.file_provider"
+            android:authorities="${applicationId}.file_provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">

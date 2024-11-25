@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.google.android.material.transition.MaterialSharedAxis
 import com.lion.team7_shopping_mall.databinding.ActivityMainBinding
-import com.lion.team7_shopping_mall.fragment.ShowClothesFragment
+import com.lion.team7_shopping_mall.inputFragment.InputFragment
+import com.lion.team7_shopping_mall.mainfragment.MainFragment
+import com.lion.team7_shopping_mall.showfragment.ShowClothesFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,18 +30,20 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-//        replaceFragment(
-//            FragmentName.SHOW_CLOTHES_FRAGMENT,
-//            false,
-//            true,
-//            null,
-//        )
+        replaceFragment(
+            FragmentName.INPUT_FRAGMENT,
+            false,
+            true,
+            null,
+        )
     }
 
     // 프래그먼트를 교체하는 함수
     fun replaceFragment(fragmentName: FragmentName, isAddToBackStack:Boolean, animate:Boolean, dataBundle: Bundle?){
         // 프래그먼트 객체
         val newFragment = when(fragmentName){
+            FragmentName.MAIN_FRAGMENT -> MainFragment()
+            FragmentName.INPUT_FRAGMENT -> InputFragment()
             FragmentName.SHOW_CLOTHES_FRAGMENT -> ShowClothesFragment()
         }
 
@@ -73,5 +77,12 @@ class MainActivity : AppCompatActivity() {
 
 // 프래그먼트들을 나타내는 값들
 enum class FragmentName(var number:Int, var str:String){
-    SHOW_CLOTHES_FRAGMENT(3, "ShowClothesFragment")
+    // 첫 화면 == 목록 화면
+    MAIN_FRAGMENT(1, "MainFragment"),
+    // 입력 화면
+    INPUT_FRAGMENT(2, "InputFragment"),
+    // 출력 화면
+    SHOW_CLOTHES_FRAGMENT(3, "ShowClothesFragment"),
+
+    // 수정 화면
 }
