@@ -2,7 +2,7 @@ package com.lion.team7_shopping_mall.repository
 
 import android.content.Context
 import com.lion.team7_shopping_mall.database.ClothesDatabase
-import com.lion.team7_shopping_mall.viewmodel.ClothesVO
+import com.lion.team7_shopping_mall.database.ClothesVO
 import com.lion.team7_shopping_mall.viewmodel.ClothesViewModel
 
 class ClothesRepository {

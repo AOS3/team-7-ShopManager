@@ -1,4 +1,4 @@
-package com.lion.team7_shopping_mall.viewmodel
+package com.lion.team7_shopping_mall.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

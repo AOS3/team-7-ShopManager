@@ -1,11 +1,10 @@
-package com.lion.team7_shopping_mall.dao
+package com.lion.team7_shopping_mall.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.lion.team7_shopping_mall.viewmodel.ClothesVO
 
 @Dao
 interface ClothesDAO {
