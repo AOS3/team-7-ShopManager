@@ -83,6 +83,6 @@ enum class FragmentName(var number:Int, var str:String){
     INPUT_FRAGMENT(2, "InputFragment"),
     // 출력 화면
     SHOW_CLOTHES_FRAGMENT(3, "ShowClothesFragment"),
-
     // 수정 화면
+
 }
