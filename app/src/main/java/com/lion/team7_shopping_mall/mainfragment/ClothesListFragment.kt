@@ -12,6 +12,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentClothesListBinding
+import com.lion.temp.util.FragmentName
+import com.lion.temp.util.SubFragmentName
 
 
 class ClothesListFragment(val mainFragment: MainFragment) : Fragment() {
@@ -62,7 +64,7 @@ class ClothesListFragment(val mainFragment: MainFragment) : Fragment() {
     fun settingFAB(){
         fragmentClothesListBinding.apply {
             fabMainAdd.setOnClickListener {
-                // InputFragment로 이동. (입력 화면으로 이동)
+                mainActivity.replaceFragment(FragmentName.INPUT_FRAGMENT,true,false,null)
 
             }
         }
@@ -106,4 +108,3 @@ class ClothesListFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
 }
-

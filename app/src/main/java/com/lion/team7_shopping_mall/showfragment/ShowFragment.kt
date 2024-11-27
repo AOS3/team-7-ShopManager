@@ -5,19 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentShowClothesBinding
+import com.lion.temp.util.FragmentName
 
-class ShowClothesFragment : Fragment() {
+class ShowFragment : Fragment() {
 
     lateinit var fragmentShowClothesBinding: FragmentShowClothesBinding
+    lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         fragmentShowClothesBinding = FragmentShowClothesBinding.inflate(inflater)
-
+        mainActivity = activity as MainActivity
         settingImageViewTextView()
         settingToolbar()
 
@@ -30,11 +33,11 @@ class ShowClothesFragment : Fragment() {
 
             toolbarShowClothes.setNavigationIcon(R.drawable.arrow_back_24px)
             toolbarShowClothes.setNavigationOnClickListener {
-
+                mainActivity.removeFragment(FragmentName.SHOW_FRAGMENT)
             }
 
             toolbarShowClothes.setOnMenuItemClickListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.itemShowClothesModify -> imageViewShowClothesImage.setImageResource(R.drawable.padding_image)
                 }
 

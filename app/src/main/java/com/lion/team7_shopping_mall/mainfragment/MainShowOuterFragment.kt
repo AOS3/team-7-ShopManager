@@ -13,6 +13,7 @@ import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentMainShowOuterBinding
 import com.lion.team7_shopping_mall.databinding.RowBinding
+import com.lion.temp.util.FragmentName
 
 class MainShowOuterFragment : Fragment() {
     lateinit var fragmentMainShowOuterBinding: FragmentMainShowOuterBinding
@@ -67,7 +68,9 @@ class MainShowOuterFragment : Fragment() {
         inner class ViewHolderShowOuter(var rowBinding: RowBinding) : RecyclerView.ViewHolder(rowBinding.root),
             View.OnClickListener {
             override fun onClick(v: View?) {
-                // 세부 정보를 보는 화면으로 이동한다.
+                val dataBundle = Bundle()
+                dataBundle.putInt("IDX",adapterPosition)
+                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT,true,false,null)
 
             }
         }

@@ -13,6 +13,7 @@ import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentSearchClothesBinding
 import com.lion.team7_shopping_mall.databinding.RowBinding
+import com.lion.temp.util.SubFragmentName
 
 class SearchClothesFragment(val mainFragment: MainFragment) : Fragment() {
 

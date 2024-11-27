@@ -13,6 +13,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentMainBinding
+import com.lion.temp.util.SubFragmentName
 
 class MainFragment : Fragment() {
 
@@ -76,15 +77,3 @@ class MainFragment : Fragment() {
 
 }
 
-// MainFragment를 통해 보여줄 Fragment들의 이름
-
-enum class SubFragmentName(val number:Int, val str:String){
-
-    // 학생 목록 화면
-    CLOTHES_LIST_FRAGMENT(1, "ClothesListFragment"),
-
-    // 옷 검색 화면
-    SEARCH_CLOTHES_FRAGMENT(2, "SearchClothesFragment")
-
-
-}

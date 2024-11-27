@@ -2,9 +2,12 @@ package com.lion.team7_shopping_mall.inputFragment.category
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -28,28 +31,15 @@ import java.io.File
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.inputFragment.temp
+import com.lion.temp.util.ClothesCategoryName
+import com.lion.temp.util.ClothesTypeByCategoryName
 
 
-class InputShirtFragment : Fragment() {
+class InputShirtFragment(val inputFragment: InputFragment) : Fragment() {
     lateinit var fragmentInputShirtBinding: FragmentInputShirtBinding
     lateinit var mainActivity: MainActivity
-
-    // 앨범 런처
-    lateinit var albumLauncher: ActivityResultLauncher<Intent>
-    // 원본 사진 찍기용 런처
-    lateinit var originalCameraLauncher: ActivityResultLauncher<Intent>
-    // 촬영된 사진이 위치할 경로
-    lateinit var filePath:String
-    // 저장된 파일에 접근하기 위한 Uri
-    lateinit var contentUri: Uri
-    //사진가져오기권한
-    val permissionList = arrayOf(
-        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-        android.Manifest.permission.ACCESS_MEDIA_LOCATION
-    )
-
-
 
     // 색상 데이터 리스트
     private val colorList = listOf(
@@ -67,12 +57,6 @@ class InputShirtFragment : Fragment() {
 
     private var selectColorList = mutableListOf<String>() // 선택된 색상 리스트
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //런처초기화
-        settingLauncher()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,14 +64,8 @@ class InputShirtFragment : Fragment() {
         fragmentInputShirtBinding = FragmentInputShirtBinding.inflate(inflater)
         mainActivity = activity as MainActivity
 
-        //권한 호출
-        requestPermissions(permissionList, 0)
-
         //색상고르기 설정
         settingRecyclerViewColorSelector()
-
-        //사진가져오기세팅
-        settingImageViewSetImage()
 
         //가격,재고수량 슬라이더
         settingSlider()
@@ -100,6 +78,8 @@ class InputShirtFragment : Fragment() {
 
         //사용자의 실시간 입력감지
         saveListener()
+
+        setImage()
         return fragmentInputShirtBinding.root
     }
 
@@ -149,28 +129,21 @@ class InputShirtFragment : Fragment() {
     //임시저장소(temp)에 저장하기
     fun saveInTemp() {
         fragmentInputShirtBinding.apply {
-            //타입
-            val type = "shirt"
-            Log.d("InputData", "종류: $type")
             // 상품명
             val name = textInputLayoutName.editText?.text.toString()
-            Log.d("InputData", "상품명: $name")
 
             // 가격 슬라이더 값
             val price = sliderPrice.value.toInt()
-            Log.d("InputData", "가격: $price")
 
             // 재고 슬라이더 값
-            val stock = sliderCount.value.toInt()
-            Log.d("InputData", "재고: $stock")
+            val inventory = sliderCount.value.toInt()
 
-            val selectedCategory = when (toggleGroupCategory.checkedButtonId) {
-                R.id.buttonHoodie -> "후드"
-                R.id.buttonSweatShirt -> "맨투맨"
-                R.id.buttonShortSleeveTshirt -> "반팔티셔츠"
+            val selectedTypeByCategory = when (toggleGroupCategory.checkedButtonId) {
+                R.id.buttonHoodie -> ClothesTypeByCategoryName.HOODIE.str
+                R.id.buttonSweatShirt -> ClothesTypeByCategoryName.SWEAT_SHIRT.str
+                R.id.buttonShortSleeveTshirt-> ClothesTypeByCategoryName.SHORT_SLEEVE_T_SHIRT.str
                 else -> "미선택"
             }
-            Log.d("InputData", "종류: $selectedCategory")
 
             // 사이즈 선택 리스트
             val selectedSizes = mutableListOf<String>()
@@ -186,66 +159,44 @@ class InputShirtFragment : Fragment() {
                 if (checkBoxS.isChecked) selectedSizes.add("S")
                 if (checkBoxXS.isChecked) selectedSizes.add("XS")
             }
-            Log.d("InputData", "선택된 사이즈: $selectedSizes")
 
             // RecyclerView로 색상 정보 추출
             // selectColorList는 RecyclerView에서 선택된 색상 정보를 담는 List로 가정
             val selectedColors = selectColorList
-            Log.d("InputData", "선택된 색상: $selectedColors")
 
-            temp.name = name
+
+            temp.clothesCategory = ClothesCategoryName.SHIRT.str
+            temp.clothesName = name
+            temp.clothesPrice = price
+            temp.clothesInventory = inventory
+            temp.clothesTypeByCategory = selectedTypeByCategory
+
+            temp.clothesColor = selectedColors.toString()
+            temp.clothesSize = selectedSizes.toString()
+
+            Log.d(
+                "test",
+                """
+    clothesPicture: ${temp.clothesPicture}
+    clothesName: ${temp.clothesName}
+    clothesPrice: ${temp.clothesPrice}
+    clothesInventory: ${temp.clothesInventory}
+    clothesColor: ${temp.clothesColor}
+    clothesSize: ${temp.clothesSize}
+    clothesCategory: ${temp.clothesCategory}
+    clothesTypeByCategory: ${temp.clothesTypeByCategory}
+    """.trimIndent()
+            )
+
+
+//            val clothesColorString = "[XL, L, M]" // 저장된 문자열
+//            val clothesColorList = clothesColorString
+//                .removeSurrounding("[", "]") // 대괄호 제거
+//                .split(", ") // 콤마와 공백으로 분리
 
         }
     }
-    //런처 초기화
-    private fun settingLauncher(){
-        // 사진 가져오는 런처를 초기화
-        albumLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleAlbumResult(result)
-        }
 
-        originalCameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleCameraResult(result)
-        }
-    }
-
-    //사진가져오기 버튼 설정
-    private fun settingImageViewSetImage(){
-        fragmentInputShirtBinding.apply {
-            // 외부 저장소 경로를 가져온다.
-            filePath = mainActivity.getExternalFilesDir(null).toString()
-
-            buttonGetImageFromCamera.setOnClickListener {
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                // 촬영한 사진이 저장될 파일 이름
-                val fileName = "/temp_${System.currentTimeMillis()}.jpg"
-                // 경로 + 파일이름
-                val picPath = "${filePath}${fileName}"
-                val file = File(picPath)
-
-                // 사진이 저장될 위치를 관리하는 Uri 객체를 생성ㅎ
-                contentUri = FileProvider.getUriForFile(mainActivity, "com.lion.getpicture.file_provider", file)
-
-                // Activity를 실행한다.
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri)
-                originalCameraLauncher.launch(cameraIntent)
-            }
-        }
-
-        //앨범에서 사진가져오는 버튼설정
-        fragmentInputShirtBinding.apply {
-            buttonGetImageFromGallery.setOnClickListener {
-                val albumIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                // 이미지 타입을 설정한다.
-                albumIntent.setType("image/*")
-                // 선택할 파일의 타입을 지정(안드로이드 OS가 사전 작업을 할 수 있도록)
-                val mimeType = arrayOf("image/*")
-                albumIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
-                // 액티비티 실행
-                albumLauncher.launch(albumIntent)
-            }
-        }
-    }
 
     //가격,재고수량 슬라이더
     private fun settingSlider(){
@@ -378,29 +329,7 @@ class InputShirtFragment : Fragment() {
         }
     }
 
-    private fun handleAlbumResult(result: ActivityResult) {
-        if (result.resultCode == RESULT_OK && result.data?.data != null) {
-            val uri = result.data?.data!!
-            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val source = ImageDecoder.createSource(mainActivity.contentResolver, uri)
-                ImageDecoder.decodeBitmap(source)
-            } else {
-                BitmapFactory.decodeFile(uri.path)
-            }
-            fragmentInputShirtBinding.imageViewSetImage.setImageBitmap(bitmap)
-        }
-    }
 
-    private fun handleCameraResult(result: ActivityResult) {
-        if (result.resultCode == RESULT_OK) {
-            val bitmap = BitmapFactory.decodeFile(contentUri.path)
-            fragmentInputShirtBinding.imageViewSetImage.setImageBitmap(bitmap)
-
-            // 파일 삭제
-            val file = File(contentUri.path!!)
-            file.delete()
-        }
-    }
 
     private fun settingRecyclerViewColorSelector(){
         fragmentInputShirtBinding.apply {
@@ -408,6 +337,30 @@ class InputShirtFragment : Fragment() {
             recyclerViewColorSelector.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             recyclerViewColorSelector.adapter = RecyclerViewColorSelector(colorList)
         }
+    }
+
+    //앨범에서 사진가져오기
+    //앨범에서 사진가져오기
+    private fun setImage() {
+        fragmentInputShirtBinding.apply {
+            buttonGetImageFromGallery.setOnClickListener {
+                val albumIntent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                albumIntent.setType("image/*")
+                val mimeType = arrayOf("image/*")
+                albumIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
+                inputFragment.albumLauncher.launch(albumIntent)
+            }
+
+            buttonGetImageFromCamera.setOnClickListener {
+                inputFragment.takePictureByCamera()
+            }
+        }
+    }
+
+    fun setImageBitmap(bitmap: Bitmap) {
+        fragmentInputShirtBinding.imageViewSetImage.setImageBitmap(bitmap)
+        saveInTemp()
     }
 
     inner class RecyclerViewColorSelector(
