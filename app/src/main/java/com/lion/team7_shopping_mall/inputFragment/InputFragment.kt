@@ -110,7 +110,7 @@ class InputFragment() : Fragment() {
                         )
 
                         // 데이터 저장
-                        ClothesRepository.insertStudentInfo(mainActivity, sampleClothes)
+                        ClothesRepository.insertClothesInfo(mainActivity, sampleClothes)
 
                         // 저장된 데이터 확인
                         val clothesDatabase = ClothesDatabase.getInstance(mainActivity)

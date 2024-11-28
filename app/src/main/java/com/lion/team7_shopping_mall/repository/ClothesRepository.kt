@@ -10,7 +10,7 @@ class ClothesRepository {
     companion object {
 
         // 옷 정보를 저장하는 메서드
-        fun insertStudentInfo(context: Context, clothesViewModel: ClothesViewModel){
+        fun insertClothesInfo(context: Context, clothesViewModel: ClothesViewModel){
             // 데이터베이스 객체를 가져온다.
             val clothesDatabase = ClothesDatabase.getInstance(context)
             // ViewModel에 있는 데이터를 VO에 담아준다.
