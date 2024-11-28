@@ -35,6 +35,7 @@ import com.lion.team7_shopping_mall.inputFragment.category.InputPantsFragment
 import com.lion.team7_shopping_mall.inputFragment.category.InputShirtFragment
 import com.lion.team7_shopping_mall.inputFragment.category.InputSkirtFragment
 import com.lion.team7_shopping_mall.repository.ClothesRepository
+import com.lion.team7_shopping_mall.viewmodel.ClothesViewModel
 import com.lion.temp.util.FragmentName
 
 import com.lion.temp.util.InputFragmentName
@@ -93,13 +94,11 @@ class InputFragment() : Fragment() {
             .setMessage("저장하시겠습니까?")
             .setPositiveButton("네") { dialog, _ ->
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    val work = async(Dispatchers.IO){
-                        // 데이터베이스 객체 가져오기
-                        val clothesDatabase = ClothesDatabase.getInstance(mainActivity)
 
+                CoroutineScope(Dispatchers.Main).launch {
+                    val work = async(Dispatchers.IO) {
                         // 샘플 데이터 생성
-                        val sampleClothes = ClothesVO(
+                        val sampleClothes = ClothesViewModel(
                             clothesPicture = temp.clothesPicture,
                             clothesName = temp.clothesName,
                             clothesPrice = temp.clothesPrice,
@@ -110,20 +109,44 @@ class InputFragment() : Fragment() {
                             clothesTypeByCategory = temp.clothesTypeByCategory
                         )
 
-                        // 데이터 삽입
-                        clothesDatabase?.clothesDAO()?.insertClothesData(sampleClothes)
+                        // 데이터 저장
+                        ClothesRepository.insertClothesInfo(mainActivity, sampleClothes)
+
+                        // 저장된 데이터 확인
+                        val clothesDatabase = ClothesDatabase.getInstance(mainActivity)
+                        clothesDatabase?.clothesDAO()?.selectClothesDataAll()
                     }
-                    work.await()
+
+                    val savedData = work.await()
+
+                    // 저장된 데이터 로그 출력
+                    savedData?.forEach { clothes ->
+                        Log.d(
+                            "test",
+                            """
+        저장된 데이터:
+        ID=${clothes.clothesIdx}
+        Name=${clothes.clothesName}
+        Picture=${clothes.clothesPicture}
+        Price=${clothes.clothesPrice}
+        Inventory=${clothes.clothesInventory}
+        Color=${clothes.clothesColor}
+        Size=${clothes.clothesSize}
+        Category=${clothes.clothesCategory}
+        TypeByCategory=${clothes.clothesTypeByCategory}
+        """.trimIndent()
+                        )
+                    }
+
+
+                    // 성공 메시지
+                    Toast.makeText(mainActivity, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+
+                    temp.clear()
+                    Log.d("test", "저장 후 temp 클리어: ${temp.clothesName}")
+                    mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
+                    dialog.dismiss()
                 }
-
-                // 저장 성공 로그 출력
-                Log.d("test", "데이터 저장 성공")
-
-                Toast.makeText(mainActivity, "저장되었습니다.", Toast.LENGTH_SHORT).show()
-
-                temp.clear()
-                mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
-                dialog.dismiss()
             }
             .setNegativeButton("취소") { dialog, _ ->
                 dialog.dismiss()
@@ -131,6 +154,7 @@ class InputFragment() : Fragment() {
             .create()
             .show()
     }
+
 
     //각각의 프래그먼트로 이동하는 부분
     private fun settingFragment() {
