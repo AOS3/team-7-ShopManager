@@ -7,7 +7,7 @@ enum class FragmentName(var number:Int, var str:String){
     // 입력 화면
     INPUT_FRAGMENT(2, "InputFragment"),
     // 출력 화면
-    SHOW_FRAGMENT(3, "ShowFragment"),
+    SHOW_FRAGMENT(3, "ShowMainFragment"),       // 이부분 수정 2024.11.27
     // 수정 화면
     MODIFY_FRAGMENT(4, "ModifyFragment"),
 }

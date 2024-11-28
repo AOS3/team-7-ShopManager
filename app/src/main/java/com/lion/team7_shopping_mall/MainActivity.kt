@@ -11,7 +11,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.lion.team7_shopping_mall.databinding.ActivityMainBinding
 import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.mainfragment.MainFragment
-import com.lion.team7_shopping_mall.showfragment.ShowFragment
+import com.lion.team7_shopping_mall.showfragment.ShowMainFragment
 import com.lion.temp.util.FragmentName
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val newFragment = when(fragmentName){
             FragmentName.MAIN_FRAGMENT -> MainFragment()
             FragmentName.INPUT_FRAGMENT -> InputFragment()
-            FragmentName.SHOW_FRAGMENT -> ShowFragment()
+            FragmentName.SHOW_FRAGMENT -> ShowMainFragment()     // 이부분 수정 2024.11.27
             FragmentName.MODIFY_FRAGMENT-> TODO()
         }
 
