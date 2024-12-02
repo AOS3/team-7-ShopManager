@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -21,6 +21,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:id="@+id/textFieldClothesInOutPrice"
         android:hint="가격">
 
@@ -35,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:layout_gravity="end"
         >
 
