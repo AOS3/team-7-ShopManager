@@ -1,6 +1,7 @@
 package com.lion.team7_shopping_mall.repository
 
 import android.content.Context
+import android.util.Log
 import com.lion.team7_shopping_mall.database.ClothesDatabase
 import com.lion.team7_shopping_mall.database.ClothesVO
 import com.lion.team7_shopping_mall.viewmodel.ClothesViewModel
@@ -72,6 +73,7 @@ class ClothesRepository {
 
                 // 리스트에 담는다.
                 clothesViewModelList.add(clothesViewModel)
+                Log.d("test100", "${clothesViewModel}")
             }
             return clothesViewModelList
         }

@@ -33,4 +33,5 @@ interface ClothesDAO {
     // 옷 한개의 정보를 수정하는 메서드
     @Update
     fun updateClothesData(clothesVO: ClothesVO)
+
 }
