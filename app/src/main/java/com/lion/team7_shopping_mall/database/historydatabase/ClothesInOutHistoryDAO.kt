@@ -24,7 +24,7 @@ interface ClothesInOutHistoryDAO {
     // 옷 입춝도 내역을 가져오는 메서드
     @Query("""
         select * from ClothesInOutHistoryTable
-        order by clothesInOutHistoryIdx desc""")
+        order by clothesInOutHistoryIdx asc""")
     fun selectClothesInOutHistoryDataAll() : List<ClothesInOutHistoryVO>
 
 }
