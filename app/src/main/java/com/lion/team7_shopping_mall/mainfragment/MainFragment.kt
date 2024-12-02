@@ -1,8 +1,7 @@
 package com.lion.team7_shopping_mall.mainfragment
 
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.util.Log
+
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentMainBinding
+import com.lion.team7_shopping_mall.showfragment.ShowMainFragment
 import com.lion.temp.util.SubFragmentName
 
 class MainFragment : Fragment() {
@@ -38,13 +38,16 @@ class MainFragment : Fragment() {
     fun replaceFragment(fragmentName: SubFragmentName, isAddToBackStack:Boolean, animate:Boolean, dataBundle: Bundle?){
         // 프래그먼트 객체
         val newFragment = when(fragmentName){
-            // 학생 목록 화면
+            // 옷 목록 화면
             SubFragmentName.CLOTHES_LIST_FRAGMENT -> ClothesListFragment(this)
-            // 학생 정보 검색 화면
+            // 옷 정보 검색 화면
             SubFragmentName.SEARCH_CLOTHES_FRAGMENT -> SearchClothesFragment(this)
-            // 옷 상세 정보 보는 화면
 
+            // * 추가 구현 및 연결 필요
+            // 옷 상세 정보 보는 화면
+            SubFragmentName.SHOW_STUDENT_FRAGMENT -> ShowMainFragment()
             // 옷 정보 수정 화면
+
 
         }
 

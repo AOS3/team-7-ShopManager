@@ -1,5 +1,6 @@
 package com.lion.team7_shopping_mall.mainfragment
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,14 +16,20 @@ import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentMainShowAllBinding
 import com.lion.team7_shopping_mall.databinding.RowBinding
+import com.lion.team7_shopping_mall.repository.ClothesRepository
+import com.lion.team7_shopping_mall.viewmodel.ClothesViewModel
 import com.lion.temp.util.FragmentName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class MainShowAllFragment : Fragment() {
 
     lateinit var fragmentMainShowAllBinding: FragmentMainShowAllBinding
     lateinit var mainActivity: MainActivity
 
-    // 확인용 데이터
+    /*// 확인용 데이터
     // 사용할 데이터
     // 이미지 리소스 아이
     val imageArray = arrayOf(
@@ -39,7 +46,9 @@ class MainShowAllFragment : Fragment() {
     // 문자열1
     val strArray = arrayOf(
         "토고", "프랑스", "스위스", "스페인", "일본", "독일", "브라질", "대한민국"
-    )
+    )*/
+
+    var clothesList = mutableListOf<ClothesViewModel>()
 
 
     override fun onCreateView(
@@ -50,6 +59,7 @@ class MainShowAllFragment : Fragment() {
         fragmentMainShowAllBinding = FragmentMainShowAllBinding.inflate(inflater)
         mainActivity = activity as MainActivity
 
+        // RecyclerView를 구성하는 메서드를 호출
         settingRecyclerView()
 
         return fragmentMainShowAllBinding.root
@@ -62,18 +72,39 @@ class MainShowAllFragment : Fragment() {
             RecyclerViewAll.layoutManager = LinearLayoutManager(mainActivity)
             val deco = MaterialDividerItemDecoration(mainActivity, MaterialDividerItemDecoration.VERTICAL)
             RecyclerViewAll.addItemDecoration(deco)
+
+            //  데이터를 읽어와 리사이클러 뷰 갱신
+            refreshRecyclerView()
+        }
+    }
+    
+    // 데이터베이스에서 데이터를 읽어와 RecyclerView를 갱신한다
+    fun refreshRecyclerView(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO){
+                // 데이터를 읽어온다
+                ClothesRepository.selectClothesInfoAll(mainActivity)
+            }
+            clothesList = work1.await()
+
+
+            // 리사이클러뷰 갱신
+            fragmentMainShowAllBinding.RecyclerViewAll.adapter?.notifyDataSetChanged()
         }
     }
 
 
     // Recyclerview의 어뎁터
     inner class RecyclerViewShowAllAdapter : RecyclerView.Adapter<RecyclerViewShowAllAdapter.ViewHolderShowAll>(){
-        inner class ViewHolderShowAll(var rowBinding: RowBinding) : RecyclerView.ViewHolder(rowBinding.root),
-            View.OnClickListener {
+        // ViewHolder
+        inner class ViewHolderShowAll(var rowBinding: RowBinding) : RecyclerView.ViewHolder(rowBinding.root), OnClickListener {
             override fun onClick(v: View?) {
+                // 옷 번호를 담는다
                 val dataBundle = Bundle()
                 dataBundle.putInt("IDX",adapterPosition)
-                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT,true,false,null)
+
+                // 옷 정보를 보는 화면으로 이동한다
+                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT,true,true, dataBundle)
 
             }
         }
@@ -86,12 +117,12 @@ class MainShowAllFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return imageArray.size
+            return clothesList.size
         }
 
         override fun onBindViewHolder(holder: ViewHolderShowAll, position: Int) {
-            holder.rowBinding.imageViewRow.setImageResource(imageArray[position])
-            holder.rowBinding.textViewRow.text = strArray[position]
+            holder.rowBinding.imageViewRow.setImageURI(Uri.parse(clothesList[position].clothesPicture))
+            holder.rowBinding.textViewRow.text = clothesList[position].clothesName
         }
     }
 }
