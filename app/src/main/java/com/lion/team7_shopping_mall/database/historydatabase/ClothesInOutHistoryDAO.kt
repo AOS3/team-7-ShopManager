@@ -18,13 +18,14 @@ interface ClothesInOutHistoryDAO {
     @Query("""
         SELECT * FROM ClothesInOutHistoryTable
         WHERE clothesInOutHistoryName = :clothesInOutHistoryName
+        ORDER BY clothesInOutHistoryIdx desc
     """)
     fun selectClothesInOutHistoryByName(clothesInOutHistoryName: String): List<ClothesInOutHistoryVO>
 
     // 옷 입춝도 내역을 가져오는 메서드
     @Query("""
         select * from ClothesInOutHistoryTable
-        order by clothesInOutHistoryIdx asc""")
+        order by clothesInOutHistoryIdx desc""")
     fun selectClothesInOutHistoryDataAll() : List<ClothesInOutHistoryVO>
 
 }
