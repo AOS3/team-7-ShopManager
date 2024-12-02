@@ -16,6 +16,7 @@ import com.lion.team7_shopping_mall.databinding.FragmentSearchClothesBinding
 import com.lion.team7_shopping_mall.databinding.RowBinding
 import com.lion.team7_shopping_mall.repository.ClothesRepository
 import com.lion.team7_shopping_mall.viewmodel.ClothesViewModel
+import com.lion.temp.util.FragmentName
 import com.lion.temp.util.SubFragmentName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,8 +96,8 @@ class SearchClothesFragment(val mainFragment: MainFragment) : Fragment() {
                 val dataBundle = Bundle()
                 dataBundle.putInt("clothesIdx",clothesList[adapterPosition].clothesIdx)
 
-                mainFragment.replaceFragment(SubFragmentName.SHOW_STUDENT_FRAGMENT,
-                    true, true, dataBundle)
+                // 옷 정보를 보는 화면으로 이동한다
+                mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT,true,true,dataBundle)
 
             }
         }

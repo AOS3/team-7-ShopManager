@@ -45,10 +45,13 @@ class MainFragment : Fragment() {
 
             // * 추가 구현 및 연결 필요
             // 옷 상세 정보 보는 화면
-            SubFragmentName.SHOW_STUDENT_FRAGMENT -> ShowMainFragment()
+            // SubFragmentName.SHOW_STUDENT_FRAGMENT -> ShowMainFragment()
             // 옷 정보 수정 화면
 
-
+            // * 추가 구현 및 연결 필요
+            // 옷 상세 정보 보는 화면
+            SubFragmentName.SHOW_STUDENT_FRAGMENT -> ShowMainFragment()
+            // 옷 정보 수정 화면
         }
 
         // bundle 객체가 null이 아니라면

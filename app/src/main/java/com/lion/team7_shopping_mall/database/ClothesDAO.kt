@@ -34,4 +34,20 @@ interface ClothesDAO {
     @Update
     fun updateClothesData(clothesVO: ClothesVO)
 
+    // 이름으로 검색하여 지정된 값과 같은 행만 가져오기
+    @Query("""
+        select * from ClothesTable
+        where clothesName = :clothesName
+        order by clothesIdx desc
+    """)
+    fun selectClothesDataAllByClothesName(clothesName:String) : List<ClothesVO>
+
+    // 한 카테고리의 옷 정보를 가져오는 메서드
+    @Query("""
+        select * from ClothesTable
+        where clothesCategory = :ClothesCategoryName
+        order by clothesIdx desc
+    """)
+    fun selectClothesDataByCategory(ClothesCategoryName:String) : List<ClothesVO>
+
 }

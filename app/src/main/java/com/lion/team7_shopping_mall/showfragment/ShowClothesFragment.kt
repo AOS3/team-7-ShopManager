@@ -1,5 +1,7 @@
 package com.lion.team7_shopping_mall.showfragment
 
+import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Calendar
 
 class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentShowMainBinding: FragmentShowMainBinding) : Fragment() {
@@ -59,6 +62,52 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
             fragmentShowMainBinding.toolbarShowClothes.setNavigationOnClickListener {
                 mainActivity.removeFragment(FragmentName.SHOW_FRAGMENT)
             }
+            fragmentShowMainBinding.toolbarShowClothes.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.itemShowClothesModify -> {} // 수정 기능
+                    R.id.ItemShowClothesDelete -> {
+                        // 다이얼로그를 구성한다.
+                        val builder1 = MaterialAlertDialogBuilder(mainActivity)
+                        // 타이틀
+                        builder1.setTitle("옷 정보 삭제")
+                        // 메시지
+                        builder1.setMessage("옷 정보 삭제시 입출력 내역도 사라지며 복구가 불가능합니다.")
+                        // 아이콘
+                        builder1.setIcon(R.drawable.delete_24px)
+                        // 버튼을 배치 (총 3개를 배치할 수 있다)
+                        // 버튼을 누르면 다이얼로그가 사라지는 것은 기본적으로 된다.
+                        // 다이얼로그가 사라지면 되는 버튼은 리스너를 null을 설정한다
+                        builder1.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                            deleteClothesData()
+                        }
+                        builder1.setNegativeButton("취소", null)
+                        // 다이얼로그를 띄운다.
+                        builder1.show()
+                    }
+                }
+
+                true
+            }
+        }
+    }
+
+    fun deleteClothesData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO) {
+                val clothesIdx = arguments?.getInt("ClothesIDX")
+                ClothesRepository.deleteClothesInfoByClothesIdx(mainActivity, clothesIdx!!)
+            }
+            work1.join()
+
+            // 해당 옷 이름의 입출고 내역 삭제
+            val work2 = async(Dispatchers.IO) {
+                val clothesName = fragmentShowClothesBinding.textViewShowClothesName.text.toString()
+                Log.d("clothesName", "${clothesName}")
+                ClothesInOutHistoryRepository.deleteClothesInOutHistoryByName(mainActivity, clothesName)
+            }
+            work2.join()
+
+            mainActivity.removeFragment(FragmentName.SHOW_FRAGMENT)
         }
     }
 
@@ -192,7 +241,8 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
     fun getDataForUpdateInventory(inoutCount: Int, inoutPrice: Int, isCheckedInOut: String) {
         fragmentShowClothesBinding.apply {
             // 옷 번호를 가져온다.
-            val clothesIndex = 2
+            val clothesIndex = arguments?.getInt("ClothesIDX")
+            Log.d("clothesIndex", "${clothesIndex}")
             // 정보를 가져와서 담을 모델
             var clothesModel: ClothesViewModel
             // 입출고 내역을 담을 모델
@@ -208,7 +258,7 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
                     // val studentIdx = arguments?.getInt("studentIdx")
 
                     // 옷 데이터를 가져온다.
-                    ClothesRepository.selectClothesInfoByClothesIdx(mainActivity, clothesIndex)
+                    ClothesRepository.selectClothesInfoByClothesIdx(mainActivity, clothesIndex!!)
                 }
                 clothesModel = work1.await()
 
@@ -308,16 +358,23 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
                     // 학생 번호를 가져온다.
                     // val studentIdx = arguments?.getInt("studentIdx")
                     // 테스트용
-                    val clothesIdx = 2
+                    val clothesIndex = arguments?.getInt("ClothesIDX")
+                    Log.d("clothesIndex", "${clothesIndex}")
 
                     // 학생 데이터를 가져온다.
-                    ClothesRepository.selectClothesInfoByClothesIdx(mainActivity, clothesIdx)
+                    ClothesRepository.selectClothesInfoByClothesIdx(mainActivity, clothesIndex!!)
                 }
                 val clothesModel = work1.await()
 
                 Log.d("clothesModel", "${clothesModel}")
-
-                imageViewShowClothesImage.setImageResource(R.drawable.padding_image)
+                val imageUri = Uri.parse(clothesModel.clothesPicture)
+                if(File(imageUri.path ?: "").exists()){
+                    imageViewShowClothesImage.setImageURI(imageUri)
+                    Log.d("setImageResource", "setImageResource")
+                }else {
+                    imageViewShowClothesImage.setImageResource(R.drawable.delete_24px)
+                    Log.d("setImageResource", "setImageResource")
+                }
                 textViewShowClothesName.text = clothesModel.clothesName
                 textViewShowClothesPrice.setText("${clothesModel.clothesPrice} 원")
                 textViewSHowClothesInventory.setText("${clothesModel.clothesInventory} 개")

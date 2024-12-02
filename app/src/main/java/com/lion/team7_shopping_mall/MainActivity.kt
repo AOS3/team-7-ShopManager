@@ -1,6 +1,9 @@
 package com.lion.team7_shopping_mall
 
 import android.os.Bundle
+import android.os.SystemClock
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +16,7 @@ import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.mainfragment.MainFragment
 import com.lion.team7_shopping_mall.showfragment.ShowMainFragment
 import com.lion.temp.util.FragmentName
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -80,5 +84,31 @@ class MainActivity : AppCompatActivity() {
     // 프래그먼트를 BackStack에서 제거하는 메서드
     fun removeFragment(fragmentName: FragmentName){
         supportFragmentManager.popBackStack(fragmentName.str, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    // 키보드 올리는 메서드
+    fun showSoftInput(view: View){
+        // 입력을 관리하는 매니저
+        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        // 포커스를 준다.
+        view.requestFocus()
+
+        thread {
+            SystemClock.sleep(1000)
+            // 키보드를 올린다.
+            inputManager.showSoftInput(view, 0)
+        }
+    }
+    // 키보드를 내리는 메서드
+    fun hideSoftInput(){
+        // 포커스가 있는 뷰가 있다면
+        if(currentFocus != null){
+            // 입력을 관리하는 매니저
+            val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            // 키보드를 내린다.
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            // 포커스를 해제한다.
+            currentFocus?.clearFocus()
+        }
     }
 }

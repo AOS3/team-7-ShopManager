@@ -19,7 +19,10 @@ enum class SubFragmentName(val number:Int, val str:String){
     CLOTHES_LIST_FRAGMENT(1, "ClothesListFragment"),
 
     // 옷 검색 화면
-    SEARCH_CLOTHES_FRAGMENT(2, "SearchClothesFragment")
+    SEARCH_CLOTHES_FRAGMENT(2, "SearchClothesFragment"),
+
+    // 옷 상세 정보 화면
+    SHOW_STUDENT_FRAGMENT(3,"ShowClothesFragment")
 }
 
 //프래그먼트를 나타내는값

@@ -145,5 +145,73 @@ class ClothesRepository {
             clothesDatabase?.clothesDAO()?.updateClothesData(clothesVO)
         }
 
+        // 옷 이름으로 검색하여 옷 데이터 전체를 가져오는 메서드
+        fun selectClothesDataAllByClothesName(context: Context, clothesName:String) : MutableList<ClothesViewModel>{
+            // 데이터를 가져온다.
+            val clothesDataBase = ClothesDatabase.getInstance(context)
+            val clothesList = clothesDataBase?.clothesDAO()?.selectClothesDataAllByClothesName(clothesName)
+
+            // 옷 데이터를 담을 리스트
+            val tempList = mutableListOf<ClothesViewModel>()
+
+            // 학생의 수 만큼 반복한다.
+            clothesList?.forEach {
+                val clothesModel = ClothesViewModel(
+                    it.clothesIdx,
+                    it.clothesPicture,
+                    it.clothesName,
+                    it.clothesPrice,
+                    it.clothesInventory,
+                    it.clothesColor,
+                    it.clothesSize,
+                    it.clothesCategory,
+                    it.clothesTypeByCategory
+                )
+                // 리스트에 담는다.
+                tempList.add(clothesModel)
+            }
+            return tempList
+        }
+
+        // 특정 카테고리의 정보를 가져오는 메서드
+        fun selectClothesInfoByCategory(context: Context,clothesCategory:String) : MutableList<ClothesViewModel>{
+            // 데이터 베이스 객체
+            val clothesDatabase = ClothesDatabase.getInstance(context)
+            //특정 카테고리의 옷 데이터 전체를 가져온다
+            val clothesVoList = clothesDatabase?.clothesDAO()?.selectClothesDataByCategory(clothesCategory)
+            // 옷 데이터를 담을 리스트
+            val clothesViewModelList = mutableListOf<ClothesViewModel>()
+            // 옷의 수 만큼 반복한다.
+            clothesVoList?.forEach {
+                // 옷 데이터를 추출한다.
+                val clothesIdx = it.clothesIdx
+                val clothesPicture = it.clothesPicture
+                val clothesName = it.clothesName
+                val clothesPrice = it.clothesPrice
+                val clothesInventory = it.clothesInventory
+                val clothesColor = it.clothesColor
+                val clothesSize = it.clothesSize
+                val clothesCategory = it.clothesCategory
+                val clothesTypeByCategory = it.clothesTypeByCategory
+
+                // 객체에 담는다.
+                val clothesViewModel = ClothesViewModel(
+                    clothesIdx,
+                    clothesPicture,
+                    clothesName,
+                    clothesPrice,
+                    clothesInventory,
+                    clothesColor,
+                    clothesSize,
+                    clothesCategory,
+                    clothesTypeByCategory
+                )
+
+                // 리스트에 담는다.
+                clothesViewModelList.add(clothesViewModel)
+            }
+            return clothesViewModelList
+        }
+
     }
 }

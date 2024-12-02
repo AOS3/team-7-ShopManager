@@ -97,7 +97,7 @@ class MainShowShirtFragment : Fragment() {
             override fun onClick(v: View?) {
                 // 옷 번호를 담는다
                 val dataBundle = Bundle()
-                dataBundle.putInt("IDX",adapterPosition)
+                dataBundle.putInt("clothesIdx", clothesList[adapterPosition].clothesIdx)
 
                 // 옷 정보를 보는 화면으로 이동한다
                 mainActivity.replaceFragment(FragmentName.SHOW_FRAGMENT,true,true,dataBundle)

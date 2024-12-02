@@ -28,4 +28,10 @@ interface ClothesInOutHistoryDAO {
         order by clothesInOutHistoryIdx desc""")
     fun selectClothesInOutHistoryDataAll() : List<ClothesInOutHistoryVO>
 
+    // 특정 이름으로 데이터를 삭제하는 메서드
+    @Query("""
+    DELETE FROM ClothesInOutHistoryTable
+    WHERE clothesInOutHistoryName = :clothesInOutHistoryName
+    """)
+    fun deleteClothesInOutHistoryByName(clothesInOutHistoryName: String)
 }

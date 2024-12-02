@@ -29,7 +29,12 @@ class ShowMainFragment : Fragment() {
         mainActivity = activity as MainActivity
 
         settingToolbarShow()
-        replaceShowFragment(ShowFragmentName.SHOW_FRAGMENT, false, true, null)
+
+        val clothesIdx = arguments?.getInt("clothesIdx")
+        Log.d("testIDX", "testIDX : ${clothesIdx}")
+        val dataBundle = Bundle()
+        dataBundle.putInt("ClothesIDX", clothesIdx!!)
+        replaceShowFragment(ShowFragmentName.SHOW_FRAGMENT, false, true, dataBundle)
 
         return fragmentShowMainBinding.root
     }

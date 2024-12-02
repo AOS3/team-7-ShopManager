@@ -1,6 +1,7 @@
 package com.lion.team7_shopping_mall.repository
 
 import android.content.Context
+import android.util.Log
 import com.lion.team7_shopping_mall.database.historydatabase.ClothesInOutHistoryDatabase
 import com.lion.team7_shopping_mall.database.historydatabase.ClothesInOutHistoryVO
 import com.lion.team7_shopping_mall.viewmodel.ClothesInOutHistoryViewModel
@@ -71,7 +72,13 @@ class ClothesInOutHistoryRepository {
                 // 리스트에 담는다.
                 tempList.add(clothesInOutHistoryViewModel)
             }
+
             return tempList
+        }
+
+        fun deleteClothesInOutHistoryByName(context: Context, clothesInOutHistoryName: String) {
+            val clothesInOutHistoryDatabase = ClothesInOutHistoryDatabase.getInstance(context)
+            clothesInOutHistoryDatabase?.clothesInOutHistoryDAO()?.deleteClothesInOutHistoryByName(clothesInOutHistoryName)
         }
 
     }
