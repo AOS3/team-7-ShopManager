@@ -414,7 +414,7 @@ class InputFragment() : Fragment() {
     }
 
     fun getRealPathFromURI(contentUri: Uri): String {
-        var cursor: Cursor? = null
+            var cursor: Cursor? = null
         try {
             val projection = arrayOf(MediaStore.Images.Media.DATA)
             cursor = mainActivity.contentResolver.query(contentUri, projection, null, null, null)
