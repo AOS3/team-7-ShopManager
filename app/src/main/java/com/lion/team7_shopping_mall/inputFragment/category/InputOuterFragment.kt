@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,18 +19,11 @@ import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentInputOuterBinding
 import com.lion.team7_shopping_mall.databinding.RowColorBinding
 import android.widget.CompoundButton.OnCheckedChangeListener
-import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.inputFragment.temp
 import com.lion.temp.util.ClothesCategoryName
 import com.lion.temp.util.ClothesTypeByCategoryName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import java.io.File
-
 
 class InputOuterFragment(val inputFragment: InputFragment) : Fragment() {
     lateinit var fragmentInputOuterBinding: FragmentInputOuterBinding
@@ -86,7 +80,27 @@ class InputOuterFragment(val inputFragment: InputFragment) : Fragment() {
         //앨범에서 사진가져오기
         setImage()
 
+        hideKeyboard()
+
         return fragmentInputOuterBinding.root
+    }
+    //키보드 내리기처리
+    fun hideKeyboard(){
+        // 최상위 레이아웃에 터치 리스너 추가
+        val rootLayout = fragmentInputOuterBinding.root // 루트 레이아웃
+        rootLayout.setOnTouchListener { _, _ ->
+            mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+            false
+        }
+
+        fragmentInputOuterBinding.textInputLayoutName.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+                true // 이벤트를 처리했음을 반환
+            } else{
+                true
+            }
+        }
     }
 
     //사용자의 실시간 입력감지

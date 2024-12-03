@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -86,7 +87,27 @@ class InputPantsFragment(val inputFragment: InputFragment) : Fragment() {
 
 
         settingRecyclerViewColorSelector()
+
+        hideKeyboard()
         return fragmentInputPantsBinding.root
+    }
+    //키보드 내리기처리
+    fun hideKeyboard(){
+        // 최상위 레이아웃에 터치 리스너 추가
+        val rootLayout = fragmentInputPantsBinding.root // 루트 레이아웃
+        rootLayout.setOnTouchListener { _, _ ->
+            mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+            false
+        }
+
+        fragmentInputPantsBinding.textInputLayoutName.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+                true // 이벤트를 처리했음을 반환
+            } else{
+                true
+            }
+        }
     }
 
     //사용자의 실시간 입력감지

@@ -53,4 +53,8 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+
+    //사진가져오기
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 }

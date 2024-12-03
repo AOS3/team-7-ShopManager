@@ -37,6 +37,18 @@ enum class InputFragmentName(var number:Int, var str:String){
     INPUT_SKIRT_FRAGMENT(4, "InputSkirtFragment"),
 }
 
+//프래그먼트를 나타내는값
+enum class ModifyFragmentName(var number:Int, var str:String){
+    // 아우터수정
+    MODIFY_OUTER_FRAGMENT(1, "ModifyOuterFragment"),
+    // 셔츠수정
+    MODIFY_SHIRT_FRAGMENT(2, "ModifyShirtFragment"),
+    // 바지수정
+    MODIFY_PANTS_FRAGMENT(3, "ModifyPantsFragment"),
+    // 치마수정
+    MODIFY_SKIRT_FRAGMENT(4, "ModifySkirtFragment"),
+}
+
 enum class ClothesTypeByCategoryName(var number:Int,var str:String){
     COAT(1,"Coat"),
     LONG_PADDING(2,"Long padding"),

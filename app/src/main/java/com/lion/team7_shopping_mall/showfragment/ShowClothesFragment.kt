@@ -64,7 +64,17 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
             }
             fragmentShowMainBinding.toolbarShowClothes.setOnMenuItemClickListener {
                 when(it.itemId) {
-                    R.id.itemShowClothesModify -> {} // 수정 기능
+                    R.id.itemShowClothesModify -> {
+                        val builderModify =  MaterialAlertDialogBuilder(mainActivity)
+                        builderModify.setTitle("옷 정보 수정")
+                        builderModify.setMessage("수정하시겠습니까?")
+                        builderModify.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                            modifyClothesData()
+                        }
+                        builderModify.setNegativeButton("취소", null)
+                        // 다이얼로그를 띄운다.
+                        builderModify.show()
+                    } // 수정 기능
                     R.id.ItemShowClothesDelete -> {
                         // 다이얼로그를 구성한다.
                         val builder1 = MaterialAlertDialogBuilder(mainActivity)
@@ -88,6 +98,24 @@ class ShowClothesFragment(val showMainFragment: ShowMainFragment, val fragmentSh
 
                 true
             }
+        }
+    }
+
+    private fun modifyClothesData() {
+        //옷의 종류에따라 수정화면이 달라지기때문에 검색해온다
+        var clothesViewModel: ClothesViewModel
+        CoroutineScope(Dispatchers.Main).launch {
+            val clothesIdx = arguments?.getInt("ClothesIDX")!!
+            val work = async(Dispatchers.IO) {
+                ClothesRepository.selectClothesInfoByClothesIdx(mainActivity, clothesIdx)
+            }
+            clothesViewModel = work.await()
+
+            val dataBundle = Bundle()
+            dataBundle.putString("ClothesCategory",clothesViewModel.clothesCategory)
+            dataBundle.putInt("ClothesIDX",clothesIdx)
+            mainActivity.replaceFragment(FragmentName.MODIFY_FRAGMENT,true,true,dataBundle)
+
         }
     }
 

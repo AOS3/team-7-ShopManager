@@ -14,6 +14,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.lion.team7_shopping_mall.databinding.ActivityMainBinding
 import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.mainfragment.MainFragment
+import com.lion.team7_shopping_mall.modifyFragment.ModifyFragment
 import com.lion.team7_shopping_mall.showfragment.ShowMainFragment
 import com.lion.temp.util.FragmentName
 import kotlin.concurrent.thread
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             FragmentName.MAIN_FRAGMENT -> MainFragment()
             FragmentName.INPUT_FRAGMENT -> InputFragment()
             FragmentName.SHOW_FRAGMENT -> ShowMainFragment()     // 이부분 수정 2024.11.27
-            FragmentName.MODIFY_FRAGMENT-> TODO()
+            FragmentName.MODIFY_FRAGMENT-> ModifyFragment()
         }
 
         // bundle 객체가 null이 아니라면

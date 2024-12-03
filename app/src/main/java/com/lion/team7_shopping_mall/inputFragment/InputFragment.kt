@@ -87,14 +87,13 @@ class InputFragment() : Fragment() {
         return fragmentInputBinding.root
     }
 
+
     //저장눌렀을때 다이얼로그-> 세이브
     private fun showDialog() {
         val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
         builder.setTitle("저장")
             .setMessage("저장하시겠습니까?")
             .setPositiveButton("네") { dialog, _ ->
-
-
                 CoroutineScope(Dispatchers.Main).launch {
                     val work = async(Dispatchers.IO) {
                         // 샘플 데이터 생성
@@ -155,13 +154,17 @@ class InputFragment() : Fragment() {
             .show()
     }
 
-
     //각각의 프래그먼트로 이동하는 부분
     private fun settingFragment() {
         fragmentInputBinding.apply {
             materialToolbarInput.title = "상품입력"
             materialToolbarInput.isTitleCentered = true
             materialToolbarInput.inflateMenu(R.menu.menu_input)
+
+            materialToolbarInput.setNavigationIcon(R.drawable.arrow_back_24px)
+            materialToolbarInput.setNavigationOnClickListener {
+                mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
+            }
 
             //초기설정
             replaceInputFragment(InputFragmentName.INPUT_OUTER_FRAGMENT, false, null)
@@ -313,6 +316,12 @@ class InputFragment() : Fragment() {
                     if (it.data != null && it.data?.data != null) {
                         val selectedImageUri = it.data?.data!!
 
+                        val savedFile = saveImageToAppDirectory(selectedImageUri) // 이미지 저장
+                        // `temp.clothesPicture`에 저장된 경로 설정
+                        if (savedFile != null) {
+                            temp.clothesPicture = savedFile.absolutePath
+                        }
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                             val source = ImageDecoder.createSource(
                                 mainActivity.contentResolver,
@@ -321,7 +330,8 @@ class InputFragment() : Fragment() {
                             val bitmap = ImageDecoder.decodeBitmap(source)
 
                             real = getRealPathFromURI(selectedImageUri)
-                            temp.clothesPicture = real
+
+
                             when (currentFragmentState) {
                                 InputFragmentName.INPUT_OUTER_FRAGMENT.number -> {
                                     val inputOuterFragment =
@@ -414,7 +424,7 @@ class InputFragment() : Fragment() {
     }
 
     fun getRealPathFromURI(contentUri: Uri): String {
-            var cursor: Cursor? = null
+        var cursor: Cursor? = null
         try {
             val projection = arrayOf(MediaStore.Images.Media.DATA)
             cursor = mainActivity.contentResolver.query(contentUri, projection, null, null, null)
@@ -559,6 +569,36 @@ class InputFragment() : Fragment() {
         val result = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, false)
         return result
     }
+
+    fun saveImageToAppDirectory(sourceUri: Uri): File? {
+        try {
+            // 저장할 디렉토리 설정
+            val storageDir = mainActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            val fileName = "temp_${System.currentTimeMillis()}.jpg"
+            val targetFile = File(storageDir, fileName)
+
+            // ContentResolver를 통해 Uri에서 파일 읽기
+            val inputStream = mainActivity.contentResolver.openInputStream(sourceUri)
+            val outputStream = FileOutputStream(targetFile)
+
+            // 데이터를 복사
+            inputStream?.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            // temp.clothesPicture에 전체 경로 저장
+            temp.clothesPicture = targetFile.absolutePath
+
+            return targetFile // 저장된 파일 반환
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+
 
 
 

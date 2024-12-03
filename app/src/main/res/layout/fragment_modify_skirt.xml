@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -148,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:padding="10dp"
-            app:checkedButton="@id/buttonHoodie"
+            app:checkedButton="@id/buttonLongSkirt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,28 +157,28 @@
             app:singleSelection="true">
 
             <Button
-                android:id="@+id/buttonHoodie"
+                android:id="@+id/buttonLongSkirt"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="후드" />
+                android:text="롱" />
 
             <Button
-                android:id="@+id/buttonSweatShirt"
+                android:id="@+id/buttonMidiSkirt"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="맨투맨" />
+                android:text="미.디" />
 
             <Button
-                android:id="@+id/buttonShortSleeveTshirt"
+                android:id="@+id/buttonMiniSkirt"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="반팔" />
+                android:text="미니" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -223,10 +224,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            android:hint="name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -283,6 +284,18 @@
                 android:layout_weight="1"
                 android:text="카메라" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonModifyDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:text="수정완료"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewColorSelector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

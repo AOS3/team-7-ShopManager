@@ -1,15 +1,8 @@
 package com.lion.team7_shopping_mall.inputFragment.category
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.graphics.Matrix
-import android.media.ExifInterface
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -17,17 +10,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
+import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lion.team7_shopping_mall.MainActivity
 import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentInputShirtBinding
 import com.lion.team7_shopping_mall.databinding.RowColorBinding
-import java.io.File
 import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.checkbox.MaterialCheckBox
@@ -80,7 +69,27 @@ class InputShirtFragment(val inputFragment: InputFragment) : Fragment() {
         saveListener()
 
         setImage()
+
+        hideKeyboard()
         return fragmentInputShirtBinding.root
+    }
+    //키보드 내리기처리
+    fun hideKeyboard(){
+        // 최상위 레이아웃에 터치 리스너 추가
+        val rootLayout = fragmentInputShirtBinding.root // 루트 레이아웃
+        rootLayout.setOnTouchListener { _, _ ->
+            mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+            false
+        }
+
+        fragmentInputShirtBinding.textInputLayoutName.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                mainActivity.hideSoftInput() // 키보드를 내리는 메서드 호출
+                true // 이벤트를 처리했음을 반환
+            } else{
+                true
+            }
+        }
     }
 
     //사용자의 실시간 입력감지
@@ -117,7 +126,7 @@ class InputShirtFragment(val inputFragment: InputFragment) : Fragment() {
         fragmentInputShirtBinding.toggleGroupCategory.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
-                    R.id.buttonHoodie -> saveInTemp()
+                    R.id.buttonCoat -> saveInTemp()
                     R.id.buttonSweatShirt -> saveInTemp()
                     R.id.buttonShortSleeveTshirt -> saveInTemp()
                 }
@@ -139,7 +148,7 @@ class InputShirtFragment(val inputFragment: InputFragment) : Fragment() {
             val inventory = sliderCount.value.toInt()
 
             val selectedTypeByCategory = when (toggleGroupCategory.checkedButtonId) {
-                R.id.buttonHoodie -> ClothesTypeByCategoryName.HOODIE.str
+                R.id.buttonCoat -> ClothesTypeByCategoryName.HOODIE.str
                 R.id.buttonSweatShirt -> ClothesTypeByCategoryName.SWEAT_SHIRT.str
                 R.id.buttonShortSleeveTshirt-> ClothesTypeByCategoryName.SHORT_SLEEVE_T_SHIRT.str
                 else -> "미선택"
