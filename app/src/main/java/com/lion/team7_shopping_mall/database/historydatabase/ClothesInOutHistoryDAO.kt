@@ -34,4 +34,13 @@ interface ClothesInOutHistoryDAO {
     WHERE clothesInOutHistoryName = :clothesInOutHistoryName
     """)
     fun deleteClothesInOutHistoryByName(clothesInOutHistoryName: String)
+
+    // 특정 이름을 수정하는 메서드
+    @Query("""
+    UPDATE ClothesInOutHistoryTable
+    SET clothesInOutHistoryName = :modifyName
+    WHERE clothesInOutHistoryName = :clothesInOutHistoryName
+    """)
+    fun updateClothesInOutHistoryName(clothesInOutHistoryName: String, modifyName: String)
+
 }

@@ -81,5 +81,12 @@ class ClothesInOutHistoryRepository {
             clothesInOutHistoryDatabase?.clothesInOutHistoryDAO()?.deleteClothesInOutHistoryByName(clothesInOutHistoryName)
         }
 
+        // 특정 이름을 변경하는 메서드
+        fun modifyClothesInOutName(context: Context, clothesName: String, modifyName: String) {
+            val clothesInOutHistoryDatabase = ClothesInOutHistoryDatabase.getInstance(context)
+            clothesInOutHistoryDatabase?.clothesInOutHistoryDAO()?.updateClothesInOutHistoryName(clothesName, modifyName)
+        }
+
+
     }
 }
