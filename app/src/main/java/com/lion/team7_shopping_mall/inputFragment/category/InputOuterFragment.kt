@@ -19,11 +19,14 @@ import com.lion.team7_shopping_mall.R
 import com.lion.team7_shopping_mall.databinding.FragmentInputOuterBinding
 import com.lion.team7_shopping_mall.databinding.RowColorBinding
 import android.widget.CompoundButton.OnCheckedChangeListener
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import com.lion.team7_shopping_mall.inputFragment.InputFragment
 import com.lion.team7_shopping_mall.inputFragment.temp
 import com.lion.temp.util.ClothesCategoryName
 import com.lion.temp.util.ClothesTypeByCategoryName
+import com.lion.temp.util.FragmentName
+import com.lion.temp.util.ModifyFragmentName
 
 class InputOuterFragment(val inputFragment: InputFragment) : Fragment() {
     lateinit var fragmentInputOuterBinding: FragmentInputOuterBinding
@@ -52,6 +55,18 @@ class InputOuterFragment(val inputFragment: InputFragment) : Fragment() {
     )
 
     private var selectColorList = mutableListOf<String>() // 선택된 색상 리스트
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 뒤로가기 콜백 등록
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
+                temp.clear()
+
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

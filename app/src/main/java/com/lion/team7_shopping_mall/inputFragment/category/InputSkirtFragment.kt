@@ -30,6 +30,7 @@ import com.lion.team7_shopping_mall.databinding.FragmentInputSkirtBinding
 import com.lion.team7_shopping_mall.databinding.RowColorBinding
 import java.io.File
 import android.widget.CompoundButton.OnCheckedChangeListener
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.lion.team7_shopping_mall.inputFragment.InputFragment
@@ -58,6 +59,17 @@ class InputSkirtFragment(val inputFragment: InputFragment) : Fragment() {
     )
 
     private var selectColorList = mutableListOf<String>() // 선택된 색상 리스트
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 뒤로가기 콜백 등록
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                temp.clear()
+
+            }
+        })
+    }
 
 
     override fun onCreateView(

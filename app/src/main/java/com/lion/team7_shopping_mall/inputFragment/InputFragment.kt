@@ -164,6 +164,7 @@ class InputFragment() : Fragment() {
             materialToolbarInput.setNavigationIcon(R.drawable.arrow_back_24px)
             materialToolbarInput.setNavigationOnClickListener {
                 mainActivity.removeFragment(FragmentName.INPUT_FRAGMENT)
+                temp.clear()
             }
 
             //초기설정
