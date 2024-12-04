@@ -87,6 +87,7 @@ class ModifySkirtFragment(val mainFragment: ModifyFragment) : Fragment() {
                 // 뒤로가기 키가 눌렸을 때 수행할 작업
                 mainFragment.removeFragment(ModifyFragmentName.MODIFY_OUTER_FRAGMENT)
                 mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
+                temp.clear()
 
             }
         })
@@ -257,7 +258,7 @@ class ModifySkirtFragment(val mainFragment: ModifyFragment) : Fragment() {
             // selectColorList는 RecyclerView에서 선택된 색상 정보를 담는 List로 가정
             val selectedColors = selectColorList
 
-            temp.clothesCategory = ClothesCategoryName.OUTER.str
+            temp.clothesCategory = ClothesCategoryName.SKIRT.str
             temp.clothesName = name
             temp.clothesPrice = price
             temp.clothesInventory = inventory
