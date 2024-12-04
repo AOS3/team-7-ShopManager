@@ -39,12 +39,14 @@ import android.widget.CompoundButton.OnCheckedChangeListener
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.lion.team7_shopping_mall.repository.ClothesInOutHistoryRepository
 import com.lion.team7_shopping_mall.util.ColorEnum
 import com.lion.temp.util.ClothesCategoryName
 import com.lion.temp.util.ModifyFragmentName
@@ -78,6 +80,9 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
 
     //수정할 옷의 idx
     var idx: Int? = null
+
+    // 옷 입출고 내역 변경할 이름/////////////////////////////////////////////////////////////////////////////
+    var clothesInOutHistoryName:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -291,6 +296,7 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
                 }
                 clothesViewModel = work.await()
 
+                clothesInOutHistoryName = clothesViewModel.clothesName
 
                 withContext(Dispatchers.Main) {
                     textInputLayoutName.editText?.setText(clothesViewModel.clothesName)
@@ -521,13 +527,13 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
     fun settingModifyDone() {
         fragmentModifyOuterBinding.apply {
             buttonModifyDone.setOnClickListener {
-                val builder = androidx.appcompat.app.AlertDialog.Builder(mainActivity)
+                val builder = AlertDialog.Builder(mainActivity)
                 builder.setTitle("수정")
                     .setMessage("수정하시겠습니까?")
                     .setPositiveButton("네") { dialog, _ ->
 
                         modifyDone()
-
+                        modifyClothesInOutHistory()///////////////////////////////////////////////
                         mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
 
                         dialog.dismiss()
@@ -592,7 +598,23 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
             }
         }
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+    fun modifyClothesInOutHistory() {
+        fragmentModifyOuterBinding.apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                val work1 = async(Dispatchers.IO) {
+                    clothesInOutHistoryName
+                    ClothesInOutHistoryRepository.modifyClothesInOutName(
+                        mainActivity,
+                        clothesInOutHistoryName,
+                        temp.clothesName
+                    )
+                }
+                work1.join()
+            }
+        }
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
     // RecyclerView 색상 선택 설정
     private fun settingRecyclerViewColorSelector() {
         // selectColorList 초기화
@@ -645,7 +667,7 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
                             if (cursor != null) {
                                 cursor.moveToNext()
                                 val idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-                                real = cursor.getString(idx)
+                                real = cursor.getString(/* columnIndex = */ idx)
                                 cursor.close()
                                 val bitmap = BitmapFactory.decodeFile(real)
                                 //temp.clothesPicture = real
