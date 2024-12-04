@@ -87,6 +87,7 @@ class ModifyOuterFragment(val mainFragment: ModifyFragment) : Fragment() {
                 // 뒤로가기 키가 눌렸을 때 수행할 작업
                 mainFragment.removeFragment(ModifyFragmentName.MODIFY_OUTER_FRAGMENT)
                 mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
+                temp.clear()
 
             }
         })

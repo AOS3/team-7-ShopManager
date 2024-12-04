@@ -90,6 +90,7 @@ class ModifyPantsFragment(val mainFragment: ModifyFragment) : Fragment() {
                 // 뒤로가기 키가 눌렸을 때 수행할 작업
                 mainFragment.removeFragment(ModifyFragmentName.MODIFY_OUTER_FRAGMENT)
                 mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
+                temp.clear()
 
             }
         })
@@ -234,9 +235,9 @@ class ModifyPantsFragment(val mainFragment: ModifyFragment) : Fragment() {
             val inventory = sliderCount.value.toInt()
 
             val selectedTypeByCategory = when (toggleGroupCategory.checkedButtonId) {
-                R.id.buttonJeans -> ClothesTypeByCategoryName.COAT.str
-                R.id.buttonCottonPants -> ClothesTypeByCategoryName.LONG_PADDING.str
-                R.id.buttonShortPants -> ClothesTypeByCategoryName.SHORT_PADDING.str
+                R.id.buttonJeans -> ClothesTypeByCategoryName.JEANS.str
+                R.id.buttonCottonPants -> ClothesTypeByCategoryName.COTTON_PANTS.str
+                R.id.buttonShortPants -> ClothesTypeByCategoryName.SHORT_PANTS.str
                 else -> "미선택"
             }
 
@@ -259,7 +260,7 @@ class ModifyPantsFragment(val mainFragment: ModifyFragment) : Fragment() {
             // selectColorList는 RecyclerView에서 선택된 색상 정보를 담는 List로 가정
             val selectedColors = selectColorList
 
-            temp.clothesCategory = ClothesCategoryName.OUTER.str
+            temp.clothesCategory = ClothesCategoryName.PANTS.str
             temp.clothesName = name
             temp.clothesPrice = price
             temp.clothesInventory = inventory
