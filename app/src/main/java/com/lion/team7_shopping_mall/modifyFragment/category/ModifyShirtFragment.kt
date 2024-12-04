@@ -54,6 +54,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.lion.team7_shopping_mall.databinding.FragmentModifyShirtBinding
+import com.lion.team7_shopping_mall.repository.ClothesInOutHistoryRepository
 
 class ModifyShirtFragment(val mainFragment: ModifyFragment) : Fragment() {
     lateinit var fragmentModifyShirtBinding: FragmentModifyShirtBinding
@@ -78,6 +79,9 @@ class ModifyShirtFragment(val mainFragment: ModifyFragment) : Fragment() {
     var pictureFromCamera: String =""
     //수정할 옷의 idx
     var idx: Int? = null
+
+    // 옷 입출고 내역 변경할 이름/////////////////////////////////////////////////////////////////////////////
+    var clothesInOutHistoryName:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -531,7 +535,7 @@ class ModifyShirtFragment(val mainFragment: ModifyFragment) : Fragment() {
                     .setPositiveButton("네") { dialog, _ ->
 
                         modifyDone()
-
+                        modifyClothesInOutHistory()///////////////////////////////////////////////
                         mainActivity.removeFragment(FragmentName.MODIFY_FRAGMENT)
 
                         dialog.dismiss()
@@ -596,6 +600,24 @@ class ModifyShirtFragment(val mainFragment: ModifyFragment) : Fragment() {
             }
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    fun modifyClothesInOutHistory() {
+        fragmentModifyShirtBinding.apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                val work1 = async(Dispatchers.IO) {
+                    clothesInOutHistoryName
+                    ClothesInOutHistoryRepository.modifyClothesInOutName(
+                        mainActivity,
+                        clothesInOutHistoryName,
+                        temp.clothesName
+                    )
+                }
+                work1.join()
+            }
+        }
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     // RecyclerView 색상 선택 설정
     private fun settingRecyclerViewColorSelector() {
